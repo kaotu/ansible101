@@ -1,0 +1,18 @@
+---
+- hosts: aws
+  remote_user: centos
+  
+  tasks:
+      - name: set up repo
+        command: "sudo yum install -y yum-utils \ device-mapper-persistent-data \ lvm2"
+      - name: find docker-ce version stable
+        command: "sudo yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo"
+      - name: install docker-ce from repo
+        command: sudo yum install docker-ce -y
+      - name: start docker
+        command: sudo systemctl start docker
+      - name: check version of docker-ce
+        command: docker --version
+      - name: add permission of user
+        command: sudo usermod -aG docker centos
+
