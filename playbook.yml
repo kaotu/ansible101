@@ -3,6 +3,8 @@
   remote_user: centos
   
   tasks:
+      - name: update
+        command: sudo yum update -y
       - name: set up repo
         command: "sudo yum install -y yum-utils \ device-mapper-persistent-data \ lvm2"
       - name: find docker-ce version stable
@@ -11,8 +13,9 @@
         command: sudo yum install docker-ce -y
       - name: start docker
         command: sudo systemctl start docker
-      - name: check version of docker-ce
-        command: docker --version
       - name: add permission of user
         command: sudo usermod -aG docker centos
-
+      - name: install docker compose
+        command: sudo sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      - name: add permission of docker compose
+        command: sudo chmod +x /usr/local/bin/docker-compose
