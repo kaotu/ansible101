@@ -13,9 +13,11 @@
         command: sudo yum install docker-ce -y
       - name: start docker
         command: sudo systemctl start docker
+      - name: enable docker
+        command: sudo systemctl enable docker
       - name: add permission of user
         command: sudo usermod -aG docker centos
       - name: install docker compose
-        command: sudo sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        command: sudo curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
       - name: add permission of docker compose
         command: sudo chmod +x /usr/local/bin/docker-compose
