@@ -9,7 +9,7 @@
 #   - A hostname/ip can be a member of multiple groups
 
 [aws]
-ip_host
+IP_HOST
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
