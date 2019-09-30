@@ -5,5 +5,3 @@
 `2. Add public key to host in ~/.ssh`
 
 `3. run command  ansible-playbook -v playbook.yml`
-
-I need to template
