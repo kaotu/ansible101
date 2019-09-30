@@ -4,6 +4,8 @@
 
 `2. Add public key to host in ~/.ssh`
 
-`3. run command  ansible-playbook -v playbook.yml`
+`3. run command ansible-playbook -v playbook.yml`
 
-test commit 
+Self Learning > https://docs.ansible.com/
+
+enjoy!
