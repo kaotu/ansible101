@@ -9,3 +9,5 @@
 Self Learning > https://docs.ansible.com/
 
 enjoy!
+
+you should knew linux command line first
