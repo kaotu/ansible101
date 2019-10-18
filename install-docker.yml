@@ -1,0 +1,53 @@
+---
+- name: install docker & docker-compose
+  hosts: server_azure
+  remote_user: centos
+  become: yes
+
+  tasks:
+  
+    - name: Remove old docker
+      yum:
+       name: 
+        - docker
+        - docker-client
+        - docker-client-latest
+        - docker-common
+        - docker-latest
+        - docker-latest-logrotate
+        - docker-logrotate
+        - docker-logrotate
+       state: removed
+
+    - name: Install yum-utils
+      yum:
+       name: 
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+       state: installed
+
+    - name: Add repo docker
+      get_url:
+       url: https://download.docker.com/linux/centos/docker-ce.repo
+       dest: /etc/yum.repos.d/docker-ce.repo
+
+    - name: Install docker-ce
+      yum:
+       name: 
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+       state: installed
+    
+    - name: Start & Enable docker
+      service:
+       name: docker
+       enabled: yes
+       state: started
+
+    - name: Add group docker to user
+      user:
+       name: centos
+       append: yes
+       group: docker
