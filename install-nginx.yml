@@ -1,0 +1,27 @@
+---
+- name: install nginx & enable firewall
+  become: yes
+  hosts: server_azure
+  remote_user: centos
+
+  tasks:
+    - name: install nginx
+      yum:
+        name: http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
+        state: installed
+    - name: start & enable service nginx
+      service:
+        name: nginx
+        enabled: yes
+        state: started
+    - name: enable service firewalld
+      service:
+        name: firewalld
+        enabled: yes
+        state: started
+    - name: enable firewalld
+      firewalld:
+        immediate: yes
+        service: http
+        state: enabled
+        permanent: yes
