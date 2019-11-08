@@ -11,7 +11,9 @@
 #[aws]
 #IP_HOST
 
-[azure]
+#[azure]
+
+[gcp]
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
