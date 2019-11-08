@@ -1,0 +1,37 @@
+---
+- name: Install jenkins
+  hosts: all
+  remote_user: kaotu
+  become: yes
+
+  tasks:
+    - name: Install Java application 1.8.0
+      yum:
+       name: java-1.8.0-openjdk-devel
+       state: installed
+    
+    - name: Add repo jenkins
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Check rpm file
+      command: sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+    - name: Install jenkins
+      yum:
+       name: jenkins
+       state: installed
+
+    - name: Start service jenkins
+      service:
+        name: jenkins
+        enabled: yes
+        state: started
+
+    - name: enable firewall
+      firewalld:
+        immediate: yes
+        port: 8080/tcp
+        state: enable
+        permanent: yes
