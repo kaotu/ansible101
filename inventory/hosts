@@ -8,12 +8,10 @@
 #   - You can enter hostnames or ip addresses
 #   - A hostname/ip can be a member of multiple groups
 
-#[aws]
-#IP_HOST
+#[web]
 
-#[azure]
-
-[gcp]
+[jenkins]
+34.87.19.112
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
