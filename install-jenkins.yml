@@ -16,7 +16,7 @@
         dest: /etc/yum.repos.d/jenkins.repo
 
     - name: Check rpm file
-      command: sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+      command: rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 
     - name: Install jenkins
       yum:
@@ -33,5 +33,13 @@
       firewalld:
         immediate: yes
         port: 8080/tcp
-        state: enable
+        state: enabled
         permanent: yes
+
+    - name: Unlock Jenkins
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: cat_unlock_jenkins
+
+    - name: echo password file
+      debug:
+        msg: "{{ cat_unlock_jenkins.stdout }}"
