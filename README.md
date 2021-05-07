@@ -7,3 +7,11 @@
 `3. run command ansible-playbook -v playbook.yml`
 
 Self Learning > https://docs.ansible.com/
+
+---
+
+#### Run commnad playbook
+- install mariadb
+```bash
+ansible-playbook --private-key <path_ssh_key> playbook/install-mariadb.yml
+```

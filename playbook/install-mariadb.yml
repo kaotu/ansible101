@@ -1,0 +1,9 @@
+---
+- name: install mariaDB For ubuntu 18.04
+  hosts: server_ubuntu
+  remote_user: "{{ remote_user }}"
+  become: true
+  gather_facts: false
+
+  roles:
+    - ../roles/install_mariadb

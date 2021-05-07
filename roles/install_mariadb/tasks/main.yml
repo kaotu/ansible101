@@ -1,0 +1,76 @@
+---
+- name: update package
+  apt:
+    update_cache: yes
+
+- name: install pip
+  apt:
+    name:
+      - python3-pip
+    state: present
+
+- name: install mariadb server
+  apt:
+    name:
+      - mariadb-server
+    state: present
+
+- name: Install The PyMySQL
+  pip: 
+    name: PyMySQL
+    state: present
+
+- name: Change the authentication plugin of MySQL root user to mysql_native_password
+  shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"WHERE user="root" AND host="localhost"'
+  register: result
+  ignore_errors: true
+
+- name: Flush Privileges
+  shell: mysql -u root -e 'FLUSH PRIVILEGES'
+  register: result
+  ignore_errors: true
+
+- name: Set password for root
+  mysql_user:
+    name: "{{ login_user }}"
+    password: "{{ login_password }}"
+    login_user: "{{ login_user }}"
+    login_password: "{{ login_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  ignore_errors: true
+
+- name: Removes anonymous user account for localhost
+  mysql_user:
+    login_user: "{{ login_user }}"
+    login_password: "{{ login_password }}"
+    name: ''
+    state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Delete database with name 'test' & Create database with name 'sit_cc'
+  mysql_db:
+    login_user: "{{ item.login_user }}"
+    login_password: "{{ item.login_password }}"
+    name: "{{  item.dbname }}"
+    state: "{{ item.state }}"
+  loop:
+    - {login_user: "{{ login_user }}", login_password: "{{ login_password }}", dbname: test*, state: absent}
+    - {login_user: "{{ login_user }}", login_password: "{{ login_password }}", dbname: "{{ db_name }}", state: present}
+  
+- name: Add user sit-cc service
+  mysql_user:
+    login_user: "{{ login_user }}"
+    login_password: "{{ login_password }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: '"{{ db_name }}".*:ALL'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Add user admin
+  mysql_user:
+    login_user: "{{ login_user }}"
+    login_password: "{{ login_password }}"
+    name: "{{ admin_user }}"
+    password: "{{ admin_password }}"
+    priv: '*.*:ALL'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
