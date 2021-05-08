@@ -21,7 +21,7 @@
     state: present
 
 - name: Change the authentication plugin of MySQL root user to mysql_native_password
-  shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"WHERE user="root" AND host="localhost"'
+  shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
   register: result
   ignore_errors: true
 
@@ -35,7 +35,7 @@
     name: "{{ login_user }}"
     password: "{{ login_password }}"
     login_user: "{{ login_user }}"
-    login_password: "{{ login_password }}"
+    login_password: ''
     login_unix_socket: /var/run/mysqld/mysqld.sock
   ignore_errors: true
 
@@ -63,7 +63,8 @@
     login_password: "{{ login_password }}"
     name: "{{ db_user }}"
     password: "{{ db_password }}"
-    priv: '"{{ db_name }}".*:ALL'
+    priv: '{{ db_name }}.*:ALL,GRANT'
+    host: '%'
     login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: Add user admin
@@ -72,5 +73,17 @@
     login_password: "{{ login_password }}"
     name: "{{ admin_user }}"
     password: "{{ admin_password }}"
-    priv: '*.*:ALL'
+    priv: '*.*:ALL,GRANT'
+    host: '%'
     login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: (DATABASE) Allow remote hosts to connect 
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    backrefs: yes
+    regexp: '^bind-address'
+    line: 'bind-address            = {{ db_server_bind_address }}'
+    state: present
+
+- name: Restart mariaDB
+  shell: systemctl restart mariadb
